@@ -2,9 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package horrorspace.room.parsing;
+package horrorspace.room.parsing.face;
 
 import horrorspace.room.Room;
+import horrorspace.room.parsing.PlyElement;
+import horrorspace.room.parsing.PlyProperty;
+import horrorspace.room.parsing.RoomPrototype;
 import horrorspace.util.RoomReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +19,7 @@ import org.lwjgl.util.vector.Vector3f;
  *
  * @author Matt
  */
-class PlyFace implements PlyElement {
+public class PlyFace implements PlyElement {
     List<PlyProperty> properties = new LinkedList<>();
     int faceCount;
 
@@ -49,11 +52,12 @@ class PlyFace implements PlyElement {
                 int[] vertices = new int[3];
                 vertices[0] = Integer.parseInt(data[1]);
                 vertices[1] = Integer.parseInt(data[2]);
-                vertices[2] = Integer.parseInt(data[4]);
+                vertices[2] = Integer.parseInt(data[3]);
                 faces.add(new Face(vertices));
-                vertices[0] = Integer.parseInt(data[2]);
-                vertices[1] = Integer.parseInt(data[3]);
-                vertices[2] = Integer.parseInt(data[4]);
+                vertices = new int[3];
+                vertices[0] = Integer.parseInt(data[3]);
+                vertices[1] = Integer.parseInt(data[4]);
+                vertices[2] = Integer.parseInt(data[1]);
                 faces.add(new Face(vertices));
             }
         }

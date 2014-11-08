@@ -4,6 +4,8 @@
  */
 package horrorspace.room.parsing;
 
+import horrorspace.room.parsing.face.PlyFace;
+import horrorspace.room.parsing.vertex.PlyVertex;
 import horrorspace.room.Room;
 import horrorspace.util.BufferedReaderFactory;
 import horrorspace.util.RoomReader;

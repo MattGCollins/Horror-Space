@@ -97,7 +97,7 @@ public class HorrorSpace {
         
         //Load initial map
         try {
-            room = new RoomLoader().loadRoom("assets/Start_Room_005.ply");
+            room = new RoomLoader().loadRoom("assets/Start_Room_006.ply");
         } catch (IOException ex) {
             Logger.getLogger(HorrorSpace.class.getName()).log(Level.WARNING, null, ex);
         }

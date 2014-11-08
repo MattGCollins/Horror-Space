@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package horrorspace.room.parsing;
+package horrorspace.room.parsing.vertex;
 
-import horrorspace.util.RoomReader;
-import org.lwjgl.util.vector.Vector3f;
+import horrorspace.room.parsing.PlyProperty;
 
 /**
  *
@@ -13,5 +12,5 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public interface PlyVertexPartProperty extends PlyProperty{
 
-    public void process(float position, Vector3f vertex);
+    public void process(float position, Vertex vertex);
 }

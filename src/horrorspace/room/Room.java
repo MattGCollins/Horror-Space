@@ -16,15 +16,15 @@ import org.lwjgl.opengl.GL30;
 public class Room {
     private final int vaoID;
     private final int vertexID;
-    private final int colorID;
+    private final int textureID;
     private final int faceID;
     private final int indices;
     
 
-    public Room(int vaoID, int vertexID, int colorID, int faceID, int indices) {
+    public Room(int vaoID, int vertexID, int textureID, int faceID, int indices) {
         this.vaoID = vaoID;
         this.vertexID = vertexID;
-        this.colorID = colorID;
+        this.textureID = textureID;
         this.faceID = faceID;
         this.indices = indices;
     }

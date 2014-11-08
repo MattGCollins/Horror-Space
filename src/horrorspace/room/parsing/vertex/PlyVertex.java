@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package horrorspace.room.parsing;
+package horrorspace.room.parsing.vertex;
 
-import horrorspace.room.Room;
+import horrorspace.room.parsing.PlyElement;
+import horrorspace.room.parsing.RoomPrototype;
 import horrorspace.util.RoomReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.lwjgl.util.vector.Vector3f;
 
 /**
  *
@@ -20,7 +20,7 @@ public class PlyVertex implements PlyElement{
     List<PlyVertexPartProperty> properties = new LinkedList<>();
     int vertexCount;
 
-    PlyVertex(String readLine) {
+    public PlyVertex(String readLine) {
         String[] split = readLine.split("vertex ");
         vertexCount = Integer.parseInt(split[1]);
     }
@@ -37,6 +37,16 @@ public class PlyVertex implements PlyElement{
             properties.add(new PlyPropertyY());
         }else if(property.contains("float z")){
             properties.add(new PlyPropertyZ());
+        }else if(property.contains("float nx")){
+            properties.add(new PlyPropertyNormalX());
+        }else if(property.contains("float ny")){
+            properties.add(new PlyPropertyNormalY());
+        }else if(property.contains("float nz")){
+            properties.add(new PlyPropertyNormalZ());
+        }else if(property.contains("float s")){
+            properties.add(new PlyPropertyS());
+        }else if(property.contains("float t")){
+            properties.add(new PlyPropertyT());
         }
     }
 
@@ -48,9 +58,9 @@ public class PlyVertex implements PlyElement{
      */
     @Override
     public void process(RoomReader roomReader, RoomPrototype room) throws IOException{
-        List<Vector3f> vertices = new ArrayList<>();
+        List<Vertex> vertices = new ArrayList<>();
         for(int iter = 0; iter < vertexCount; ++iter){
-            Vector3f vertex = new Vector3f();
+            Vertex vertex = new Vertex();
             String readLine = roomReader.readLine();
             String[] coordinates = readLine.split(" ");
             int coordinateIndex = 0;
