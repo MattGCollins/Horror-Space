@@ -73,12 +73,11 @@ public class RoomLoader {
     }
 
     private Room parseRoom() throws IOException {
-        final Room room = new Room();
-        System.err.println(elements.size());
+        final RoomPrototype room = new RoomPrototype();
         for(PlyElement element : elements){
             element.process(roomReader, room);
         }
-        return room;
+        return room.generateRoom();
     }
     
     private void readLine() throws IOException{

@@ -157,10 +157,9 @@ public class HorrorSpace {
         GL11.glRotated(Globals.player.rotation,0,1,0);
         glPushMatrix();
         GL11.glTranslated(-Globals.player.position.x, -Globals.player.position.y, -Globals.player.position.z);
-//        GL11.glTranslated(-Globals.player.positionDif.getX(),0,Globals.player.positionDif.getY());
         
         
-        Resources.textures[1].bind();        
+//        Resources.textures[1].bind();        
         room.render();
         
         glPopMatrix();

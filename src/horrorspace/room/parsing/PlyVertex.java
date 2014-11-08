@@ -47,7 +47,7 @@ public class PlyVertex implements PlyElement{
      * @throws IOException
      */
     @Override
-    public void process(RoomReader roomReader, Room room) throws IOException{
+    public void process(RoomReader roomReader, RoomPrototype room) throws IOException{
         List<Vector3f> vertices = new ArrayList<>();
         for(int iter = 0; iter < vertexCount; ++iter){
             Vector3f vertex = new Vector3f();

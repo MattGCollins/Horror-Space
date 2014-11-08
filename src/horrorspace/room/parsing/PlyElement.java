@@ -16,6 +16,6 @@ public interface PlyElement {
 
     public void addProperty(String readLine);
 
-    public void process(RoomReader bufferedReader, Room room) throws IOException;
+    public void process(RoomReader roomReader, RoomPrototype room) throws IOException;
     
 }

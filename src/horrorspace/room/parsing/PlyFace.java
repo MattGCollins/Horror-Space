@@ -5,7 +5,6 @@
 package horrorspace.room.parsing;
 
 import horrorspace.room.Room;
-import horrorspace.room.Face;
 import horrorspace.util.RoomReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ class PlyFace implements PlyElement {
     }
 
     @Override
-    public void process(RoomReader roomReader, Room room) throws IOException {
+    public void process(RoomReader roomReader, RoomPrototype room) throws IOException {
         List<Face> faces = new ArrayList<>();
         for(int iter = 0; iter < faceCount; ++iter){
             String readLine = roomReader.readLine();
@@ -45,19 +44,16 @@ class PlyFace implements PlyElement {
                 vertices[0] = Integer.parseInt(data[1]);
                 vertices[1] = Integer.parseInt(data[2]);
                 vertices[2] = Integer.parseInt(data[3]);
-                System.err.println(vertices[0] + " " + vertices[1] + " " + vertices[2]);
                 faces.add(new Face(vertices));
             }else if(vertexCount == 4){
                 int[] vertices = new int[3];
                 vertices[0] = Integer.parseInt(data[1]);
                 vertices[1] = Integer.parseInt(data[2]);
                 vertices[2] = Integer.parseInt(data[4]);
-                System.err.println(vertices[0] + " " + vertices[1] + " " + vertices[2]);
                 faces.add(new Face(vertices));
                 vertices[0] = Integer.parseInt(data[2]);
                 vertices[1] = Integer.parseInt(data[3]);
                 vertices[2] = Integer.parseInt(data[4]);
-                System.err.println(vertices[0] + " " + vertices[1] + " " + vertices[2]);
                 faces.add(new Face(vertices));
             }
         }
