@@ -14,6 +14,7 @@ public class Vertex {
     private float [] texture = new float[2];
     private boolean normalExists = false;
     private boolean textureExists = false;
+    private int BYTES_IN_FLOAT = 4;
 
     /**
      * @return get the x position of the vertex
@@ -169,7 +170,7 @@ public class Vertex {
      * @return get an array with all data
      */
     public float[] getVertex(){
-        int floatSize = 3 + (normalExists ? 3 : 0) + (textureExists ? 2 : 0);
+        int floatSize = getVertexFloatSize();
         float [] vertex = new float[floatSize];
         
         int copyPosition = 0;
@@ -186,6 +187,22 @@ public class Vertex {
         }
         
         return vertex;
+    }
+
+    public int getVertexFloatSize() {
+        return 3 + (normalExists ? 3 : 0) + (textureExists ? 2 : 0);
+    }
+    
+    public int getVertexStride() {
+        return getVertexFloatSize() * BYTES_IN_FLOAT;
+    }
+    
+    public int getNormalOffset() {
+        return 3 * BYTES_IN_FLOAT;
+    }
+    
+    public int getTextureOffset() {
+        return (3 + (normalExists ? 3 : 0))  * BYTES_IN_FLOAT;
     }
     
 }

@@ -4,6 +4,7 @@
  */
 package horrorspace;
 
+import horrorspace.rendering.Shaders;
 import horrorspace.engine.InputKeeper;
 import horrorspace.entity.Player;
 import horrorspace.room.Room;
@@ -95,6 +96,9 @@ public class HorrorSpace {
         initGL();
         resizeGL();
         
+        //Load shaders
+        Shaders.loadShaders();
+        
         //Load initial map
         try {
             room = new RoomLoader().loadRoom("assets/Start_Room_006.ply");
@@ -157,9 +161,7 @@ public class HorrorSpace {
         GL11.glRotated(Globals.player.rotation,0,1,0);
         glPushMatrix();
         GL11.glTranslated(-Globals.player.position.x, -Globals.player.position.y, -Globals.player.position.z);
-        
-        
-//        Resources.textures[1].bind();        
+               
         room.render();
         
         glPopMatrix();

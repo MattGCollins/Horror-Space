@@ -4,9 +4,6 @@
  */
 package horrorspace.room.parsing;
 
-import horrorspace.util.RoomReader;
-import org.lwjgl.util.vector.Vector3f;
-
 /**
  *
  * @author Matt

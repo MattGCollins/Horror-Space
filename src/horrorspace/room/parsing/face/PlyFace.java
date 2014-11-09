@@ -4,7 +4,6 @@
  */
 package horrorspace.room.parsing.face;
 
-import horrorspace.room.Room;
 import horrorspace.room.parsing.PlyElement;
 import horrorspace.room.parsing.PlyProperty;
 import horrorspace.room.parsing.RoomPrototype;
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.lwjgl.util.vector.Vector3f;
 
 /**
  *

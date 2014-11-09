@@ -4,7 +4,6 @@
  */
 package horrorspace.entity;
 
-import java.awt.geom.Point2D;
 import org.lwjgl.util.vector.Vector3f;
 
 /**

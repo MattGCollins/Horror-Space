@@ -236,6 +236,74 @@ public class VertexTest {
          assertTrue(vertex.isTextureExists());
      }
      
+     @Test
+     public void testVertexFloatSizeInitially() {
+         assertEquals(3, vertex.getVertexFloatSize());
+     }
+     
+     @Test
+     public void testVertexFloatSizeIncreasesAfterSetNormal() {
+         setNormal(0f, 1f, 2f);
+         
+         assertEquals(6, vertex.getVertexFloatSize());
+     }
+     
+     @Test
+     public void testVertexFloatSizeIncreasesAfterSetTexture() {
+         setTexture(0f, 1f);
+         
+         assertEquals(5, vertex.getVertexFloatSize());
+     }
+     
+     @Test
+     public void testVertexFloatSizeIncreasesAfterSetNormalAndTexture() {
+         setNormal(0f, 1f, 2f);
+         setTexture(0f, 1f);
+         
+         assertEquals(8, vertex.getVertexFloatSize());
+     }
+     
+     @Test
+     public void testVertexStrideIs4TimesVertexFloatSize() {
+         assertEquals(12, vertex.getVertexStride());
+     }
+     
+     @Test
+     public void testVertexStrideWithNormal() {
+         setNormal(0f, 1f, 2f);
+         
+         assertEquals(24, vertex.getVertexStride());
+     }
+     
+     @Test
+     public void testVertexStrideWithTexture() {
+         setTexture(0f, 1f);
+         
+         assertEquals(20, vertex.getVertexStride());
+     }
+     
+     @Test
+     public void testVertexStrideWithNormalAndTexture() {
+         setNormal(0f, 1f, 2f);
+         setTexture(0f, 1f);
+         
+         assertEquals(32, vertex.getVertexStride());
+     }
+     
+     @Test
+     public void testGetNormalOffset() {         
+         assertEquals(12, vertex.getNormalOffset());
+     }
+     
+     @Test
+     public void testGetTextureOffsetChangesWithNormal() {         
+         assertEquals(12, vertex.getTextureOffset());
+         
+         setNormal(0f, 1f, 2f);
+         
+         assertEquals(24, vertex.getTextureOffset());
+     }
+     
      private void setPosition(float x, float y, float z) {
         vertex.setX(x);
         vertex.setY(y);

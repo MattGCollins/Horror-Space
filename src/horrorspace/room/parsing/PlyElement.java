@@ -4,7 +4,6 @@
  */
 package horrorspace.room.parsing;
 
-import horrorspace.room.Room;
 import horrorspace.util.RoomReader;
 import java.io.IOException;
 

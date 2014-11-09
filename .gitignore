@@ -2,3 +2,4 @@ Unused/
 build/
 private/
 errors.log
+/dist/

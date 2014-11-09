@@ -4,13 +4,9 @@
  */
 package horrorspace.engine;
 
-import java.awt.AWTException;
 import java.awt.Point;
-import java.awt.Robot;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import horrorspace.DisplayProperties;

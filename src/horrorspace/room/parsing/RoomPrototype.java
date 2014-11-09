@@ -52,11 +52,11 @@ public class RoomPrototype {
 
     private int generateVertices() {
         int vertexID = GL15.glGenBuffers();
-        FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertices.size() * 3);
+        final Vertex vertexInfo = vertices.get(0);
+        int floatBufferSize = vertices.size() * vertexInfo.getVertexFloatSize();
+        FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(floatBufferSize);
         for(Vertex vertex : vertices){
-            vertexBuffer.put(vertex.getX());
-            vertexBuffer.put(vertex.getY());
-            vertexBuffer.put(vertex.getZ());
+            vertexBuffer.put(vertex.getVertex());
         }
         vertexBuffer.flip();
         
@@ -65,7 +65,10 @@ public class RoomPrototype {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexID);
         //Add data to buffer
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexBuffer, GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
+        //Define data structure
+        GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, vertexInfo.getVertexStride(), 0);
+        GL20.glVertexAttribPointer(1, 3, GL11.GL_FLOAT, false, vertexInfo.getVertexStride(), vertexInfo.getNormalOffset());
+        GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, false, vertexInfo.getVertexStride(), vertexInfo.getTextureOffset());
         //Unbind
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
         GL30.glBindVertexArray(0);

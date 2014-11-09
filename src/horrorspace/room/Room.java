@@ -4,10 +4,12 @@
  */
 package horrorspace.room;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import horrorspace.Resources;
+import horrorspace.rendering.Shaders;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
 
 /**
  *
@@ -30,19 +32,26 @@ public class Room {
     }
 
     public void render() {
-        GL30.glBindVertexArray(vaoID);
-        GL20.glEnableVertexAttribArray(0);
+        glUseProgram(Shaders.programId);
+        glBindTexture(GL_TEXTURE_2D, Resources.textures[1].getTextureID());
+        glBindVertexArray(vaoID);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
         
 
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, faceID);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceID);
 
         // Draw the vertices
-        GL11.glDrawElements(GL11.GL_TRIANGLES, indices, GL11.GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, indices, GL_UNSIGNED_INT, 0);
 
         // Put everything back to default (deselect)
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
-        GL20.glDisableVertexAttribArray(0);
-        GL30.glBindVertexArray(0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glDisableVertexAttribArray(2);
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(0);
+        glBindVertexArray(0);
+        glUseProgram(0);
     }
     
 }
