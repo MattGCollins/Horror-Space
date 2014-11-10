@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package horrorspace;
 
 import horrorspace.rendering.Shaders;
 import horrorspace.engine.InputKeeper;
 import horrorspace.entity.Player;
-import horrorspace.room.Room;
-import horrorspace.room.parsing.RoomLoader;
+import horrorspace.model.Model;
+import horrorspace.parsing.ModelLoader;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -32,7 +28,7 @@ public class HorrorSpace {
     
     public static final Logger LOGGER = Logger.getLogger(HorrorSpace.class.getName());
     private static final DisplayProperties displayProperties = DisplayProperties.getInstance();
-    Room room;
+    Model model;
 
     static {
         try {
@@ -101,7 +97,7 @@ public class HorrorSpace {
         
         //Load initial map
         try {
-            room = new RoomLoader().loadRoom("assets/Start_Room_006.ply");
+            model = (Model) new ModelLoader().loadFile("assets/Start_Room_006.ply");
         } catch (IOException ex) {
             Logger.getLogger(HorrorSpace.class.getName()).log(Level.WARNING, null, ex);
         }
@@ -162,7 +158,7 @@ public class HorrorSpace {
         glPushMatrix();
         GL11.glTranslated(-Globals.player.position.x, -Globals.player.position.y, -Globals.player.position.z);
                
-        room.render();
+        model.render();
         
         glPopMatrix();
         glPopMatrix();

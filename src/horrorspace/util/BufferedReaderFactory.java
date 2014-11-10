@@ -14,10 +14,10 @@ import java.io.FileReader;
  * @author Matt
  */
 public class BufferedReaderFactory {
-    public static RoomReader getReader(String filename) throws FileNotFoundException {
+    public LinebreakFileReader getReader(String filename) throws FileNotFoundException {
         
-        File roomFile = new File(filename);
-        FileReader reader = new FileReader(roomFile);
-        return new RoomReader(new BufferedReader(reader));
+        File linebreakFile = new File(filename);
+        FileReader reader = new FileReader(linebreakFile);
+        return new LinebreakFileReader(new BufferedReader(reader));
     }
 }
