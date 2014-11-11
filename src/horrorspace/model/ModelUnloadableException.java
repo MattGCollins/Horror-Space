@@ -1,4 +1,4 @@
-package horrorspace.parsing;
+package horrorspace.model;
 
 import java.io.IOException;
 

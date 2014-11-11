@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Matt
  */
-abstract class FileLoader<T> {
+public abstract class FileLoader<T> {
     private final BufferedReaderFactory readerFactory;
     private LinebreakFileReader linebreakFileReader;
     List<PlyElement> elements = new LinkedList<>();
@@ -53,20 +53,26 @@ abstract class FileLoader<T> {
 
     private void pushElement() throws IOException {
         PlyElement element = createElement(linebreakFileReader.getLastLine());
-        if(element == null)
+        if(element == null){
+            linebreakFileReader.readLine();
             return;
+        }
         
         elements.add(element);
         
         //Add properties
-        addProperties(element, linebreakFileReader);
+        addProperties(element);
+    }
+
+    protected void addProperties(PlyElement element) throws IOException {
+        while (linebreakFileReader.readLine().contains("property")){
+            element.addProperty(linebreakFileReader.getLastLine());
+        }
     }
     
     protected abstract void checkTypeIsCorrect(LinebreakFileReader linebreakFileReader) throws IOException ;
 
     protected abstract PlyElement createElement(String lastLine);
-    
-    protected abstract void addProperties(PlyElement element, LinebreakFileReader linebreakFileReader) throws IOException;
 
     protected abstract LoadableItemPrototype<T> getPrototype();
 }

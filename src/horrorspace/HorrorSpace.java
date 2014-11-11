@@ -1,10 +1,10 @@
 package horrorspace;
 
+import horrorspace.room.RoomLoader;
 import horrorspace.rendering.Shaders;
 import horrorspace.engine.InputKeeper;
 import horrorspace.entity.Player;
-import horrorspace.model.Model;
-import horrorspace.parsing.ModelLoader;
+import horrorspace.room.Room;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -28,7 +28,7 @@ public class HorrorSpace {
     
     public static final Logger LOGGER = Logger.getLogger(HorrorSpace.class.getName());
     private static final DisplayProperties displayProperties = DisplayProperties.getInstance();
-    Model model;
+    Room room;
 
     static {
         try {
@@ -97,7 +97,7 @@ public class HorrorSpace {
         
         //Load initial map
         try {
-            model = (Model) new ModelLoader().loadFile("assets/Start_Room_006.ply");
+            room = new RoomLoader().loadFile("assets/Start_Room.room");
         } catch (IOException ex) {
             Logger.getLogger(HorrorSpace.class.getName()).log(Level.WARNING, null, ex);
         }
@@ -158,7 +158,7 @@ public class HorrorSpace {
         glPushMatrix();
         GL11.glTranslated(-Globals.player.position.x, -Globals.player.position.y, -Globals.player.position.z);
                
-        model.render();
+        room.render();
         
         glPopMatrix();
         glPopMatrix();

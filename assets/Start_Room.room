@@ -1,0 +1,8 @@
+ply-format-room
+element model 1
+property file
+element collisionModel 1
+property file
+end_header
+assets/Start_Room_006.ply
+assets/Start_Room_006.ply

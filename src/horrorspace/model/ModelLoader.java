@@ -1,6 +1,8 @@
-package horrorspace.parsing;
+package horrorspace.model;
 
-import horrorspace.model.ModelPrototype;
+import horrorspace.parsing.FileLoader;
+import horrorspace.parsing.LoadableItemPrototype;
+import horrorspace.parsing.PlyElement;
 import horrorspace.parsing.face.PlyFace;
 import horrorspace.parsing.vertex.PlyVertex;
 import horrorspace.util.LinebreakFileReader;
@@ -10,7 +12,7 @@ import java.io.IOException;
  *
  * @author Matt
  */
-public class ModelLoader extends FileLoader{
+public class ModelLoader extends FileLoader<Model>{
     @Override
     protected void checkTypeIsCorrect(LinebreakFileReader linebreakFileReader) throws IOException {
         if(!"ply".equals(linebreakFileReader.readLine())){
@@ -29,13 +31,6 @@ public class ModelLoader extends FileLoader{
             return new PlyFace(lastLine);
         }
         return null;
-    }
-
-    @Override
-    protected void addProperties(PlyElement element, LinebreakFileReader linebreakFileReader) throws IOException {
-        while (linebreakFileReader.readLine().contains("property")){
-            element.addProperty(linebreakFileReader.getLastLine());
-        }
     }
 
     @Override
