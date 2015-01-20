@@ -1,4 +1,4 @@
-package horrorspace.model;
+package horrorspace.model.parsing;
 
 /**
  *

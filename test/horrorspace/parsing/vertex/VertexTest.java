@@ -10,11 +10,11 @@ import org.junit.Before;
  * @author Matt
  */
 public class VertexTest {
-    private Vertex vertex;
+    private RenderVertex vertex;
     
     @Before
     public void setUp() {
-        vertex = new Vertex();
+        vertex = new RenderVertex();
     }
     
      @Test

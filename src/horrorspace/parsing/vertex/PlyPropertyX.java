@@ -7,7 +7,7 @@ package horrorspace.parsing.vertex;
 public class PlyPropertyX implements PlyVertexPartProperty{
 
     @Override
-    public void process(float position, Vertex vertex) {
+    public void process(float position, RenderVertex vertex) {
         vertex.setX(position);
     }
     

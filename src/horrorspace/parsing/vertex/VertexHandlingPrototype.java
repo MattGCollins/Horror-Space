@@ -8,5 +8,5 @@ import java.util.List;
  * @author Matt
  */
 public interface VertexHandlingPrototype extends LoadableItemPrototype {
-    public void setVertices(List<Vertex> vertices);
+    public void setVertices(List<RenderVertex> vertices);
 }

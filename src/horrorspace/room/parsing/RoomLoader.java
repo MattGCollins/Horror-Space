@@ -1,11 +1,12 @@
-package horrorspace.room;
+package horrorspace.room.parsing;
 
-import horrorspace.collision.PlyCollisionModel;
-import horrorspace.model.ModelUnloadableException;
-import horrorspace.model.PlyModel;
+import horrorspace.physics.collision.parsing.PlyCollisionModel;
+import horrorspace.model.parsing.ModelUnloadableException;
+import horrorspace.model.parsing.PlyModel;
 import horrorspace.parsing.FileLoader;
 import horrorspace.parsing.LoadableItemPrototype;
 import horrorspace.parsing.PlyElement;
+import horrorspace.room.Room;
 import horrorspace.util.LinebreakFileReader;
 import java.io.IOException;
 
@@ -26,7 +27,7 @@ public class RoomLoader extends FileLoader<Room> {
         if(lastLine.contains("model")) {
             return new PlyModel(lastLine);
         } else if(lastLine.contains("collisionModel")) {
-            return new PlyCollisionModel();
+            return new PlyCollisionModel(lastLine);
         }
         return null;
     }

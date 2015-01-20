@@ -23,7 +23,7 @@ public class PlyPropertyNormalXTest {
     @Test
     public void testNormalXIsSetWhenProcessed() {
         float position = new Random().nextFloat();
-        Vertex vertex = new Vertex();
+        RenderVertex vertex = new RenderVertex();
         
         property.process(position, vertex);
         

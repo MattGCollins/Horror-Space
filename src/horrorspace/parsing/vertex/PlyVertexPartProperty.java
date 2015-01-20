@@ -8,5 +8,5 @@ import horrorspace.parsing.PlyProperty;
  */
 public interface PlyVertexPartProperty extends PlyProperty{
 
-    public void process(float position, Vertex vertex);
+    public void process(float position, RenderVertex vertex);
 }

@@ -1,7 +1,8 @@
-package horrorspace.model;
+package horrorspace.model.parsing;
 
+import horrorspace.model.Model;
 import horrorspace.parsing.face.Face;
-import horrorspace.parsing.vertex.Vertex;
+import horrorspace.parsing.vertex.RenderVertex;
 import horrorspace.parsing.face.FaceHandlingPrototype;
 import horrorspace.parsing.vertex.VertexHandlingPrototype;
 import java.nio.FloatBuffer;
@@ -18,7 +19,7 @@ import org.lwjgl.opengl.GL30;
  * @author Matt
  */
 public class ModelPrototype implements VertexHandlingPrototype, FaceHandlingPrototype {
-    private List<Vertex> vertices;
+    private List<RenderVertex> vertices;
     private List<Face> faces;
     
     /**
@@ -26,7 +27,7 @@ public class ModelPrototype implements VertexHandlingPrototype, FaceHandlingProt
      * @param vertices
      */
     @Override
-    public void setVertices(List<Vertex> vertices) {
+    public void setVertices(List<RenderVertex> vertices) {
         this.vertices = vertices;
     }
     
@@ -49,10 +50,10 @@ public class ModelPrototype implements VertexHandlingPrototype, FaceHandlingProt
 
     private int generateVertices() {
         int vertexID = GL15.glGenBuffers();
-        final Vertex vertexInfo = vertices.get(0);
+        final RenderVertex vertexInfo = vertices.get(0);
         int floatBufferSize = vertices.size() * vertexInfo.getVertexFloatSize();
         FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(floatBufferSize);
-        for(Vertex vertex : vertices){
+        for(RenderVertex vertex : vertices){
             vertexBuffer.put(vertex.getVertex());
         }
         vertexBuffer.flip();

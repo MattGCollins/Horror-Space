@@ -1,7 +1,7 @@
 package horrorspace.room;
 
 import horrorspace.model.Model;
-import java.util.ArrayList;
+import horrorspace.physics.collision.CollisionModel;
 import java.util.List;
 
 /**
@@ -10,9 +10,11 @@ import java.util.List;
  */
 public class Room {
     private final List<Model> models;
+    private final List<CollisionModel> collisionModels;
 
-    Room(List<Model> models) {
+    public Room(List<Model> models, List<CollisionModel> collisionModels) {
         this.models = models;
+        this.collisionModels = collisionModels;
     }
     
     public void render() {

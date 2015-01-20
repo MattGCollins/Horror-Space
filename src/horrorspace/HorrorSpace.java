@@ -1,6 +1,6 @@
 package horrorspace;
 
-import horrorspace.room.RoomLoader;
+import horrorspace.room.parsing.RoomLoader;
 import horrorspace.rendering.Shaders;
 import horrorspace.engine.InputKeeper;
 import horrorspace.entity.Player;
@@ -219,7 +219,7 @@ public class HorrorSpace {
             render();
             }
             try {
-            Thread.sleep(100);
+                Thread.sleep(100);
             }
             catch(InterruptedException ex) {
             }
@@ -239,5 +239,7 @@ public class HorrorSpace {
         Globals.curFrameTime = currentTime;
         
         Globals.player.update();
+        
+        Globals.collisionManager.update();
     }
 }

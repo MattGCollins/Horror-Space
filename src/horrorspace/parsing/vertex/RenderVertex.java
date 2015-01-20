@@ -4,7 +4,7 @@ package horrorspace.parsing.vertex;
  *
  * @author Matt
  */
-public class Vertex {
+public class RenderVertex {
     private float [] position = new float[3];
     private float [] normal = new float[3];
     private float [] texture = new float[2];

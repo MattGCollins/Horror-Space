@@ -1,6 +1,12 @@
-package horrorspace.model;
+package horrorspace.physics.collision.parsing;
 
+import horrorspace.physics.collision.CollisionModel;
 import horrorspace.file.PlyFile;
+import horrorspace.model.Model;
+import horrorspace.model.parsing.ModelDescriptor;
+import horrorspace.model.parsing.ModelHandlingPrototype;
+import horrorspace.model.parsing.ModelLoader;
+import horrorspace.model.parsing.PlyModelProperty;
 import horrorspace.parsing.ImproperPrototypeException;
 import horrorspace.parsing.LoadableItemPrototype;
 import horrorspace.parsing.PlyElement;
@@ -13,13 +19,13 @@ import java.util.List;
  *
  * @author Matt
  */
-public class PlyModel implements PlyElement{
-    private int modelCount;
+public class PlyCollisionModel implements PlyElement {
+    private int collisionModelCount;
     private List<PlyModelProperty> properties = new LinkedList<>();
     
-    public PlyModel(String readLine) {
-        String[] split = readLine.split("model ");
-        modelCount = Integer.parseInt(split[1]);
+    public PlyCollisionModel(String readLine) {
+        String[] split = readLine.split("collisionModel ");
+        collisionModelCount = Integer.parseInt(split[1]);
     }
     
     @Override
@@ -34,9 +40,9 @@ public class PlyModel implements PlyElement{
         if(!(prototype instanceof ModelHandlingPrototype)){
             throw new ImproperPrototypeException("Cannot load model into prototype.");
         }
-        ModelHandlingPrototype modelPrototype = (ModelHandlingPrototype) prototype;
-        List<Model> models = new LinkedList<>();
-        for(int iter = 0; iter < modelCount; ++iter){
+        CollisionModelHandlingPrototype collisionModelPrototype = (CollisionModelHandlingPrototype) prototype;
+        List<CollisionModel> collisionModels = new LinkedList<>();
+        for(int iter = 0; iter < collisionModelCount; ++iter){
             ModelDescriptor descriptor = new ModelDescriptor();
             String readLine = linebreakFileReader.readLine();
             String[] modelParts = readLine.split(" ");
@@ -45,8 +51,9 @@ public class PlyModel implements PlyElement{
                 modelProperty.process(modelParts[propertyIndex], descriptor);
                 ++propertyIndex;
             }
-            models.add(new ModelLoader().loadFile(descriptor.getFilename()));
+            collisionModels.add(new CollisionModelLoader().loadFile(descriptor.getFilename()));
         }
-        modelPrototype.setModels(models);
+        collisionModelPrototype.setCollisionModels(collisionModels);
     }
+
 }

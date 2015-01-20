@@ -1,5 +1,6 @@
-package horrorspace.model;
+package horrorspace.model.parsing;
 
+import horrorspace.model.Model;
 import horrorspace.parsing.LoadableItemPrototype;
 import java.util.List;
 

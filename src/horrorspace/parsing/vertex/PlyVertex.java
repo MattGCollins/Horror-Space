@@ -59,9 +59,9 @@ public class PlyVertex implements PlyElement{
             throw new ImproperPrototypeException("Cannot load vertices into prototype.");
         }
         VertexHandlingPrototype vertexPrototype = (VertexHandlingPrototype) prototype;
-        List<Vertex> vertices = new ArrayList<>();
+        List<RenderVertex> vertices = new ArrayList<>();
         for(int iter = 0; iter < vertexCount; ++iter){
-            Vertex vertex = new Vertex();
+            RenderVertex vertex = new RenderVertex();
             String readLine = linebreakFileReader.readLine();
             String[] coordinates = readLine.split(" ");
             int coordinateIndex = 0;

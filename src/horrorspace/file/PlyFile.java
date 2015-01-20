@@ -1,7 +1,7 @@
 package horrorspace.file;
 
-import horrorspace.model.ModelDescriptor;
-import horrorspace.model.PlyModelProperty;
+import horrorspace.model.parsing.ModelDescriptor;
+import horrorspace.model.parsing.PlyModelProperty;
 
 /**
  *
