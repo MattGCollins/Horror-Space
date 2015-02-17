@@ -2,7 +2,6 @@ package horrorspace.physics.collision.parsing;
 
 import horrorspace.model.parsing.AbstractModelLoader;
 import horrorspace.physics.collision.CollisionModel;
-import horrorspace.model.*;
 import horrorspace.parsing.LoadableItemPrototype;
 
 /**

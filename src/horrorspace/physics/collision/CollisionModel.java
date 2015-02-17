@@ -12,6 +12,9 @@ public class CollisionModel implements CollisionObject {
     List<CollisionFace> collisionFaces = new ArrayList<>();
     
     public CollisionModel() {
+    }
+    
+    public void init() {
         Globals.collisionManager.addStaticEntity(this);
     }
 

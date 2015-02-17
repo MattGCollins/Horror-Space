@@ -2,10 +2,8 @@ package horrorspace.physics.collision.parsing;
 
 import horrorspace.physics.collision.CollisionModel;
 import horrorspace.file.PlyFile;
-import horrorspace.model.Model;
 import horrorspace.model.parsing.ModelDescriptor;
 import horrorspace.model.parsing.ModelHandlingPrototype;
-import horrorspace.model.parsing.ModelLoader;
 import horrorspace.model.parsing.PlyModelProperty;
 import horrorspace.parsing.ImproperPrototypeException;
 import horrorspace.parsing.LoadableItemPrototype;

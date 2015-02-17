@@ -2,7 +2,6 @@ package horrorspace;
 
 import horrorspace.room.parsing.RoomLoader;
 import horrorspace.rendering.Shaders;
-import horrorspace.engine.InputKeeper;
 import horrorspace.entity.Player;
 import horrorspace.room.Room;
 import java.io.IOException;
@@ -63,8 +62,7 @@ public class HorrorSpace {
         }
     }
 
-    public HorrorSpace() {        
-        Globals.input = new InputKeeper();
+    public HorrorSpace() {
         Globals.curFrameTime = System.nanoTime() / 1000000;
     }
 
@@ -118,7 +116,7 @@ public class HorrorSpace {
         
         Resources.init();
         
-        Globals.player = new Player();
+        new Player().init();
         
         // enable alpha blending
         GL11.glEnable(GL11.GL_BLEND);

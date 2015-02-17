@@ -2,7 +2,6 @@ package horrorspace.gravity;
 
 import horrorspace.parsing.LoadableItemPrototype;
 import horrorspace.parsing.PlyElement;
-import horrorspace.parsing.vertex.PlyVertexPartProperty;
 import horrorspace.util.LinebreakFileReader;
 import java.io.IOException;
 import java.util.LinkedList;

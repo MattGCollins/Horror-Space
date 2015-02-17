@@ -29,6 +29,9 @@ public class Player extends Entity implements CollisionSphere {
         input = Globals.input;
         moveTo(0.0f, 1.0f, 0.0f);
         setKeyBindings();
+    }
+    
+    public void init() {
         Globals.collisionManager.addEntity(this);
     }
     

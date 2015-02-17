@@ -15,6 +15,9 @@ public class Room {
     public Room(List<Model> models, List<CollisionModel> collisionModels) {
         this.models = models;
         this.collisionModels = collisionModels;
+        for(CollisionModel collisionModel : collisionModels) {
+            collisionModel.init();
+        }
     }
     
     public void render() {
