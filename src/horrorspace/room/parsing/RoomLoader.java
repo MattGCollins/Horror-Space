@@ -1,5 +1,6 @@
 package horrorspace.room.parsing;
 
+import horrorspace.gravity.PlyGravityCuboid;
 import horrorspace.physics.collision.parsing.PlyCollisionModel;
 import horrorspace.model.parsing.ModelUnloadableException;
 import horrorspace.model.parsing.PlyModel;
@@ -28,6 +29,8 @@ public class RoomLoader extends FileLoader<Room> {
             return new PlyModel(lastLine);
         } else if(lastLine.contains("collisionModel")) {
             return new PlyCollisionModel(lastLine);
+        } else if(lastLine.contains("gravityCuboid")) {
+            return new PlyGravityCuboid(lastLine);
         }
         return null;
     }

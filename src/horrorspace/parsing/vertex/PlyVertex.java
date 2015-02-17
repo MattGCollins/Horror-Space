@@ -30,19 +30,19 @@ public class PlyVertex implements PlyElement{
     public void addProperty(String property){
         if(property.contains("float x")){
             properties.add(new PlyPropertyX());
-        }else if(property.contains("float y")){
+        } else if(property.contains("float y")){
             properties.add(new PlyPropertyY());
-        }else if(property.contains("float z")){
+        } else if(property.contains("float z")){
             properties.add(new PlyPropertyZ());
-        }else if(property.contains("float nx")){
+        } else if(property.contains("float nx")){
             properties.add(new PlyPropertyNormalX());
-        }else if(property.contains("float ny")){
+        } else if(property.contains("float ny")){
             properties.add(new PlyPropertyNormalY());
-        }else if(property.contains("float nz")){
+        } else if(property.contains("float nz")){
             properties.add(new PlyPropertyNormalZ());
-        }else if(property.contains("float s")){
+        } else if(property.contains("float s")){
             properties.add(new PlyPropertyS());
-        }else if(property.contains("float t")){
+        } else if(property.contains("float t")){
             properties.add(new PlyPropertyT());
         }
     }
