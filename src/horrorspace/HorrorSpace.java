@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.glu.GLU;
 import static org.lwjgl.util.glu.GLU.gluOrtho2D;
+import org.lwjgl.util.vector.Vector3f;
 
 /**
  *
@@ -99,6 +100,7 @@ public class HorrorSpace {
         } catch (IOException ex) {
             Logger.getLogger(HorrorSpace.class.getName()).log(Level.WARNING, null, ex);
         }
+        Globals.physicsManager.addRoom(room);
     }
 
     public void destroy() {
@@ -116,7 +118,8 @@ public class HorrorSpace {
         
         Resources.init();
         
-        new Player().init();
+        Globals.player = new Player();
+        Globals.player.init();
         
         // enable alpha blending
         GL11.glEnable(GL11.GL_BLEND);
@@ -154,7 +157,8 @@ public class HorrorSpace {
         //Rotate Here
         GL11.glRotated(Globals.player.rotation,0,1,0);
         glPushMatrix();
-        GL11.glTranslated(-Globals.player.position.x, -Globals.player.position.y, -Globals.player.position.z);
+        Vector3f position = Globals.player.getPosition();
+        GL11.glTranslated(-position.x, -position.y, -position.z);
                
         room.render();
         
@@ -236,8 +240,6 @@ public class HorrorSpace {
         Globals.frameElapsed = (currentTime - Globals.curFrameTime) / 1000.0f;
         Globals.curFrameTime = currentTime;
         
-        Globals.player.update();
-        
-        Globals.collisionManager.update();
+        Globals.physicsManager.update();
     }
 }

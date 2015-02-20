@@ -9,5 +9,6 @@ package horrorspace.physics.collision;
  * @author Matt
  */
 public interface CollisionObject {
-    public void pushAway(CollisionObject object);
+    public void pushAwayPrimary(CollisionObject object);
+    public void pushAwaySecondary(CollisionObject object);
 }

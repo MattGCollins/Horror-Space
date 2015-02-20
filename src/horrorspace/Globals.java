@@ -2,6 +2,7 @@ package horrorspace;
 
 import horrorspace.engine.InputKeeper;
 import horrorspace.entity.Player;
+import horrorspace.physics.PhysicsManager;
 import horrorspace.physics.collision.CollisionManager;
 import java.util.Random;
 
@@ -21,6 +22,7 @@ public class Globals {
     public static final Random rand = new Random();
     public static final InputKeeper input = new InputKeeper();
     public static final CollisionManager collisionManager = new CollisionManager();
+    public static final PhysicsManager physicsManager = new PhysicsManager();
     
     public static long curFrameTime = 0;
     public static float frameElapsed = 1.0f / 60.0f;

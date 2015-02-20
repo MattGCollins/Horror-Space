@@ -1,5 +1,6 @@
 package horrorspace.gravity;
 
+import horrorspace.parsing.ImproperPrototypeException;
 import horrorspace.parsing.LoadableItemPrototype;
 import horrorspace.parsing.PlyElement;
 import horrorspace.util.LinebreakFileReader;
@@ -46,6 +47,23 @@ public class PlyGravityCuboid implements PlyElement {
 
     @Override
     public void process(LinebreakFileReader linebreakFileReader, LoadableItemPrototype prototype) throws IOException {
+        if(!(prototype instanceof GravityVolumeHandlingPrototype)){
+            throw new ImproperPrototypeException("Cannot load model into prototype.");
+        }
+        GravityVolumeHandlingPrototype gravityCuboidPrototype = (GravityVolumeHandlingPrototype) prototype;
+        List<GravityVolume> gravityCuboids = new LinkedList<>();
+        for(int iter = 0; iter < cuboidCount; ++iter){
+            GravityCuboid cuboid = new GravityCuboid();
+            String readLine = linebreakFileReader.readLine();
+            String[] cuboidParts = readLine.split(" ");
+            int propertyIndex = 0;
+            for (PlyCuboidPartProperty cuboidProperty : properties) {
+                cuboidProperty.process(Float.valueOf(cuboidParts[propertyIndex]).floatValue(), cuboid);
+                ++propertyIndex;
+            }
+            gravityCuboids.add(cuboid);
+        }
+        gravityCuboidPrototype.setGravityVolumes(gravityCuboids);
     }
 
 }

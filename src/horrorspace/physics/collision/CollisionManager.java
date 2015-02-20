@@ -43,7 +43,10 @@ public class CollisionManager {
     private void collideMobileWithStatic() {
         for(CollisionObject object : objects){
             for(CollisionObject staticObject : staticObjects) {
-                staticObject.pushAway(object);
+                staticObject.pushAwayPrimary(object);
+            }
+            for(CollisionObject staticObject : staticObjects) {
+                staticObject.pushAwaySecondary(object);
             }
         }
     }

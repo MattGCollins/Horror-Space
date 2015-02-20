@@ -24,15 +24,19 @@ public class CollisionModel implements CollisionObject {
      */
     public void setFaces(List<CollisionFace> collisionFaces) {
         this.collisionFaces = collisionFaces;
-        for(int i = 0; i < collisionFaces.size(); ++i) {
-            System.out.println(collisionFaces.get(i));
+    }
+
+    @Override
+    public void pushAwayPrimary(CollisionObject object) {
+        for(CollisionFace face : collisionFaces) {
+            face.pushAwayPrimary(object);
         }
     }
 
     @Override
-    public void pushAway(CollisionObject object) {
+    public void pushAwaySecondary(CollisionObject object) {
         for(CollisionFace face : collisionFaces) {
-            face.pushAway(object);
+            face.pushAwaySecondary(object);
         }
     }
 

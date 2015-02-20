@@ -30,18 +30,18 @@ public class CollisionFace implements CollisionObject {
     }
 
     @Override
-    public void pushAway(CollisionObject object) {
+    public void pushAwayPrimary(CollisionObject object) {
         if(object instanceof CollisionSphere){
             CollisionSphere sphere = (CollisionSphere) object;
-            pushAway(sphere);
+            pushAwayPrimary(sphere);
         }
     }
     
-    private void pushAway(CollisionSphere sphere) {
+    private void pushAwayPrimary(CollisionSphere sphere) {
         Vector3f vectorTo = sub(sphere.getPosition(), points[0]);
         float distance = dotProduct(vectorTo, normal);
         float radius = sphere.getRadius();
-        if(Math.abs(distance) > radius){
+        if(Math.abs(distance) >= radius){
             //We're too far away.  Return.
             return;
         }
@@ -49,11 +49,9 @@ public class CollisionFace implements CollisionObject {
         int collisionResult = isWithinFace(sphere.getPosition());
         if(collisionResult == WITHIN) {
             float scale =  getSign(distance) * (radius - Math.abs(distance));
-            sphere.setPosition(add(sphere.getPosition(), scaleVector(normal, scale)));
-            //Collided with the side.  Return now!
-            return;
+            sphere.rebound(scaleVector(normal, scale));
+            //Collided with the side!
         }
-        collideSidesAndPoints(collisionResult, sphere);
     }
 
     @Override
@@ -114,8 +112,34 @@ public class CollisionFace implements CollisionObject {
             float scale = (sphere.getRadius() - (float) Math.sqrt(squaredDistance));
             Vector3f direction = sub(spherePosition, point);
             direction.normalise(direction);
-            sphere.setPosition(add(sphere.getPosition(), scaleVector(direction, scale)));
+            sphere.rebound(scaleVector(direction, scale));
         }
+    }
+
+    @Override
+    public void pushAwaySecondary(CollisionObject object) {
+        if(object instanceof CollisionSphere){
+            CollisionSphere sphere = (CollisionSphere) object;
+            pushAwaySecondary(sphere);
+        }
+    }
+    
+    public void pushAwaySecondary(CollisionSphere sphere) {
+        Vector3f vectorTo = sub(sphere.getPosition(), points[0]);
+        float distance = dotProduct(vectorTo, normal);
+        float radius = sphere.getRadius();
+        if(Math.abs(distance) >= radius){
+            //We're too far away.  Return.
+            return;
+        }
+        int collisionResult = isWithinFace(sphere.getPosition());
+        if(collisionResult == WITHIN) {
+            float scale =  getSign(distance) * (radius - Math.abs(distance));
+            sphere.rebound(scaleVector(normal, scale));
+            //Collided with the side.  Return now!
+            return;
+        }
+        collideSidesAndPoints(collisionResult, sphere);
     }
     
     

@@ -1,5 +1,7 @@
 package horrorspace.room.parsing;
 
+import horrorspace.gravity.GravityVolume;
+import horrorspace.gravity.GravityVolumeHandlingPrototype;
 import horrorspace.physics.collision.CollisionModel;
 import horrorspace.physics.collision.parsing.CollisionModelHandlingPrototype;
 import horrorspace.model.Model;
@@ -11,14 +13,11 @@ import java.util.List;
  *
  * @author Matt
  */
-public class RoomPrototype implements ModelHandlingPrototype, CollisionModelHandlingPrototype {
+public class RoomPrototype implements ModelHandlingPrototype, CollisionModelHandlingPrototype, GravityVolumeHandlingPrototype {
     private List<Model> models;
     private List<CollisionModel> collisionModels;
+    private List<GravityVolume> gravityVolumes;
 
-    /**
-     *
-     * @param models
-     */
     @Override
     public void setModels(List<Model> models) {
         this.models = models;
@@ -30,8 +29,13 @@ public class RoomPrototype implements ModelHandlingPrototype, CollisionModelHand
     }
 
     @Override
+    public void setGravityVolumes(List<GravityVolume> gravityVolumes) {
+        this.gravityVolumes = gravityVolumes;
+    }
+
+    @Override
     public Object generateItem() {
-        return new Room(models, collisionModels);
+        return new Room(models, collisionModels, gravityVolumes);
     }
 
 }

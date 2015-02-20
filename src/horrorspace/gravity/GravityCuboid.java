@@ -1,14 +1,13 @@
 package horrorspace.gravity;
 
+import horrorspace.entity.Entity;
 import org.lwjgl.util.vector.Vector3f;
 
 /**
  *
  * @author Matt
  */
-public class GravityCuboid {
-    
-    
+public class GravityCuboid implements GravityVolume {
     private Vector3f minPosition = new Vector3f();
     private Vector3f maxPosition = new Vector3f();
     private Vector3f accelVector = new Vector3f();
@@ -52,5 +51,9 @@ public class GravityCuboid {
     public Vector3f getGravityVector() {
         return accelVector;
     }
-    
+
+    @Override
+    public void applyGravity(Entity entity) {
+        entity.applyGravity(accelVector);
+    }
 }

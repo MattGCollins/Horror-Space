@@ -8,6 +8,6 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public interface CollisionSphere extends CollisionObject {
     public Vector3f getPosition();
-    public void setPosition(Vector3f vector);
+    public void rebound(Vector3f vector);
     public float getRadius();
 }
