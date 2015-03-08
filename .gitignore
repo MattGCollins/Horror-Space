@@ -3,3 +3,5 @@ build/
 private/
 errors.log
 /dist/
+/libs/source/
+/libs/doc/

@@ -3,6 +3,7 @@ package horrorspace;
 import horrorspace.room.parsing.RoomLoader;
 import horrorspace.rendering.Shaders;
 import horrorspace.entity.Player;
+import horrorspace.math.HorrorMath;
 import horrorspace.room.Room;
 import java.io.IOException;
 import java.util.logging.FileHandler;
@@ -17,7 +18,9 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.glu.GLU;
 import static org.lwjgl.util.glu.GLU.gluOrtho2D;
+import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 /**
  *
@@ -28,7 +31,7 @@ public class HorrorSpace {
     
     public static final Logger LOGGER = Logger.getLogger(HorrorSpace.class.getName());
     private static final DisplayProperties displayProperties = DisplayProperties.getInstance();
-    Room room;
+    private Room room;
 
     static {
         try {
@@ -70,7 +73,7 @@ public class HorrorSpace {
     public void create() throws LWJGLException {
         //Display
         try{
-        Display.setDisplayMode(new DisplayMode(Globals.DISPLAY_WIDTH,Globals.DISPLAY_HEIGHT));
+        Display.setDisplayMode(new DisplayMode(DisplayProperties.INITIAL_DISPLAY_WIDTH,DisplayProperties.INITIAL_DISPLAY_HEIGHT));
         Display.setLocation(0, 0);
         }
         catch(LWJGLException o){
@@ -138,7 +141,7 @@ public class HorrorSpace {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         glPopMatrix();
         glLoadIdentity();
-        GLU.gluPerspective(75,(float)Globals.DISPLAY_WIDTH/(float)Globals.DISPLAY_HEIGHT,0.01f,100);
+        GLU.gluPerspective(75,(float)displayProperties.getSize().x/displayProperties.getSize().y,0.01f,100);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         glPushMatrix();
         
@@ -155,10 +158,14 @@ public class HorrorSpace {
         GL11.glTranslated(0,0,-0.4);
         glPushMatrix();
         //Rotate Here
-        GL11.glRotated(Globals.player.rotation,0,1,0);
+        Quaternion rotation = Globals.player.getRotation();
+//        rotation.
+        Vector4f axisAngle = HorrorMath.quaternionToAxisAngle(rotation);
+        GL11.glRotated(axisAngle.w * (180.0f / Math.PI), axisAngle.x, axisAngle.y, axisAngle.z);
         glPushMatrix();
         Vector3f position = Globals.player.getPosition();
-        GL11.glTranslated(-position.x, -position.y, -position.z);
+        float playerHeadOffset = Globals.player.getRadius() / 2;
+        GL11.glTranslated(-position.x, -position.y - playerHeadOffset, -position.z);
                
         room.render();
         
@@ -173,7 +180,7 @@ public class HorrorSpace {
         glMatrixMode(GL_PROJECTION);
         glPopMatrix();
         glLoadIdentity();
-        gluOrtho2D(0.0f,Globals.DISPLAY_WIDTH,0.0f,Globals.DISPLAY_HEIGHT);
+        gluOrtho2D(0.0f,displayProperties.getSize().x,0.0f,displayProperties.getSize().y);
         glPushMatrix();
 
         glMatrixMode(GL_MODELVIEW);
@@ -194,11 +201,11 @@ public class HorrorSpace {
 
     public void resizeGL() {
         //2D Scene
-        glViewport(0,0,Globals.DISPLAY_WIDTH,Globals.DISPLAY_HEIGHT);
+        glViewport(0,0,displayProperties.getSize().x,displayProperties.getSize().y);
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        gluOrtho2D(0.0f,Globals.DISPLAY_WIDTH,0.0f,Globals.DISPLAY_HEIGHT);
+        gluOrtho2D(0.0f,displayProperties.getSize().x,0.0f,displayProperties.getSize().y);
         glPushMatrix();
 
         glMatrixMode(GL_MODELVIEW);

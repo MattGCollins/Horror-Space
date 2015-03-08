@@ -13,5 +13,7 @@ import horrorspace.entity.Entity;
 public interface GravityVolume {
 
     public void applyGravity(Entity entity);
+
+    public boolean includes(Entity entity);
     
 }

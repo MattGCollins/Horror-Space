@@ -3,7 +3,7 @@ element model 1
 property file
 element collisionModel 1
 property file
-element gravityCuboid 1
+element gravityCuboid 2
 property float xMin
 property float xMax
 property float yMin
@@ -16,4 +16,5 @@ property float zAccel
 end_header
 assets/Start_Room_006.ply
 assets/Start_Room_006.ply
--4.000000 4.000000 0.000000 2.000000 -8.000000 1.000000 0.000000 -0.400000 0.000000
+-4.000000 4.000000 0.000000 2.000000 -8.000000 -4.000000 0.000000 -0.400000 0.000000
+-4.000000 4.000000 0.000000 2.000000 -4.000000 1.000000 0.000000 0.400000 0.000000

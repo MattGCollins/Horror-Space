@@ -2,11 +2,14 @@ package horrorspace.entity;
 
 import horrorspace.Globals;
 import horrorspace.engine.InputKeeper;
+import horrorspace.math.HorrorMath;
 import horrorspace.physics.collision.CollisionObject;
 import horrorspace.physics.collision.CollisionSphere;
 import java.awt.Point;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 /**
  *
@@ -16,6 +19,9 @@ public class Player extends Entity implements CollisionSphere {
     public int currentMove;
     public InputKeeper input;
     public float jumpPosition;
+    private float rotationX;
+    private float rotationY;
+    private Quaternion rotation;
     
     //Remove this once menus come into play
     private boolean mouseCaptured = true;
@@ -35,6 +41,7 @@ public class Player extends Entity implements CollisionSphere {
         setPosition(new Vector3f(0.0f, 1.0f, 0.0f));
         setKeyBindings();
         jumpPosition = 0;
+        rotation = new Quaternion();
     }
     
     public void init() {
@@ -50,8 +57,44 @@ public class Player extends Entity implements CollisionSphere {
     
     public void handleInput()
     {
+        calculateRotation();
+        addTranslation(calculateTranslation());
+        if(input.isDown(Keyboard.KEY_F4)){
+            if(! mouseToggling){
+                mouseCaptured = !mouseCaptured;
+                input.captureMouse(mouseCaptured);
+                mouseToggling = true;
+            }
+        } else {
+            mouseToggling = false;
+        }
+    }
+
+    private void calculateRotation() {
+        Point mouseDiff = input.getMouseDiff();
+        rotationX += mouseDiff.x / 5.0f;
+        if(rotationX > 180){
+            rotationX -= 360;
+        } else if (rotationX < -180) {
+            rotationX += 360;
+        }
+        rotationY += mouseDiff.y / 5.0f;
+        if(rotationY > 90){
+            rotationY = 90;
+        } else if (rotationY < -90) {
+            rotationY = -90;
+        }
+        Quaternion pitchQuaternion = new Quaternion();
+        pitchQuaternion.setFromAxisAngle(new Vector4f(-1, 0, 0, (float) (rotationY * (Math.PI / 180.0f))));
+        Quaternion yawQuaternion = new Quaternion();
+        yawQuaternion.setFromAxisAngle(new Vector4f(0, 1, 0, (float) (rotationX * (Math.PI / 180.0f))));
+        Quaternion.mul(pitchQuaternion, yawQuaternion, rotation);
+        rotation.normalise();
+    }
+
+    private Quaternion calculateTranslation() {
         float moveSpeed = isGrounded() ? GROUND_MOVE_SPEED : AIR_MOVE_SPEED;
-        Vector3f translation = new Vector3f();
+        Quaternion translation = new Quaternion();
         if(input.isDown(Keyboard.KEY_A) || input.isDown(Keyboard.KEY_LEFT)){
             translation.x -= moveSpeed;
         }
@@ -65,28 +108,30 @@ public class Player extends Entity implements CollisionSphere {
             translation.z -= moveSpeed;
         }
         if(input.isDown(Keyboard.KEY_SPACE)){
-            if(jumpPosition <= JUMP_DURATION){
-                System.err.println("1");
-                if(jumpPosition == 0.0f){
-                    translation.y += JUMP_INITIAL_BOOST;
+            if(jumpPosition == 0.0f){
+                if(isGrounded()){
+                    if(jumpPosition == 0.0f){
+                        translation.y += JUMP_INITIAL_BOOST;
+                    }
+                    translation.y += JUMP_HOLD_BOOST;
+                    jumpPosition += Globals.frameElapsed;
                 }
+            } else if (jumpPosition <= JUMP_DURATION) {
                 translation.y += JUMP_HOLD_BOOST;
                 jumpPosition += Globals.frameElapsed;
             }
         } else {
             jumpPosition = 0.0f;
         }
-        accelerate(translation);
-        if(input.isDown(Keyboard.KEY_F4) && ! mouseToggling){
-            mouseCaptured = !mouseCaptured;
-            input.captureMouse(mouseCaptured);
-            mouseToggling = true;
-        } else {
-            mouseToggling = false;
-        }
-        Point mouseDiff = input.getMouseDiff();
-        rotation += mouseDiff.x * 0.3;
-        
+        return translation;
+    }
+
+    public void addTranslation(Quaternion translation) {
+        Quaternion yawQuaternion = new Quaternion();
+        yawQuaternion.setFromAxisAngle(new Vector4f(0, 1, 0, (float) (-rotationX * (Math.PI / 180.0f))));
+        translation = HorrorMath.conjugate(translation, yawQuaternion);
+        Vector3f translationRotated = new Vector3f(translation.x, translation.y, translation.z);
+        accelerate(translationRotated);
     }
 
     private void setKeyBindings() {
@@ -104,6 +149,10 @@ public class Player extends Entity implements CollisionSphere {
         input.addCheck(Keyboard.KEY_M);
         input.addCheck(Keyboard.KEY_F4);
         input.addCheck(Keyboard.KEY_TAB);
+    }
+    
+    public Quaternion getRotation() {
+        return rotation;
     }
 
     @Override

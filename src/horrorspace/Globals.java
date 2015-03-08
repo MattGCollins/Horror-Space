@@ -16,9 +16,6 @@ public class Globals {
     public static final int FACING_SOUTH = 2;
     public static final int FACING_WEST = 3;
     
-    public static final int DISPLAY_HEIGHT = 600;
-    public static final int DISPLAY_WIDTH = 800;
-    
     public static final Random rand = new Random();
     public static final InputKeeper input = new InputKeeper();
     public static final CollisionManager collisionManager = new CollisionManager();

@@ -3,6 +3,8 @@ package horrorspace.gravity;
 import horrorspace.entity.Entity;
 import org.lwjgl.util.vector.Vector3f;
 
+import static horrorspace.math.HorrorMath.isPointInsideBox;
+
 /**
  *
  * @author Matt
@@ -55,5 +57,13 @@ public class GravityCuboid implements GravityVolume {
     @Override
     public void applyGravity(Entity entity) {
         entity.applyGravity(accelVector);
+    }
+
+    @Override
+    public boolean includes(Entity entity) {
+        if(isPointInsideBox(entity.getPosition(), minPosition, maxPosition)){
+            return true;
+        }
+        return false;
     }
 }

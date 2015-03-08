@@ -3,9 +3,9 @@ package horrorspace.engine;
 import java.awt.Point;
 import java.util.Iterator;
 import java.util.LinkedList;
+import horrorspace.DisplayProperties;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import horrorspace.DisplayProperties;
 
 /**
  *
@@ -13,7 +13,8 @@ import horrorspace.DisplayProperties;
  */
 public class InputKeeper {
     private Point mousePos;
-    private Point mousePosPrev;
+    private Point mouseDiff;
+    private final Point mouseCenter;
     
     private boolean leftDown;
     private boolean leftDownPrev;
@@ -33,7 +34,8 @@ public class InputKeeper {
     {
         Point center = displayProperties.getCenter();
         mousePos = new Point(center);
-        mousePosPrev = new Point(center);
+        mouseCenter = new Point(center);
+        mouseDiff = new Point(0, 0);
         
         leftDown = false;
         leftDownPrev = false;
@@ -53,9 +55,6 @@ public class InputKeeper {
         observeMousePosition();
         observeMouseButtons();
         observeKeys();
-        if(captured){
-        doCaptureMouse();
-        }
     }
     
     public void addCheck(int i)
@@ -76,7 +75,7 @@ public class InputKeeper {
     }
     
     public Point getMouseDiff(){
-        return new Point(mousePos.x - mousePosPrev.x, mousePos.y - mousePosPrev.y);
+        return mouseDiff;
     }
     
     public void captureMouse(boolean capture){
@@ -86,15 +85,10 @@ public class InputKeeper {
 
     private void observeMousePosition() {
         if(captured){
-            Point center = displayProperties.getCenter();
-            mousePosPrev.x = center.x;
-            mousePosPrev.y = center.y;
-        } else {
-            mousePosPrev.x = mousePos.x;
-            mousePosPrev.y = mousePos.y;
+            Point center = mouseCenter;
+            mousePos.setLocation(Mouse.getX(), Mouse.getY());
+            mouseDiff.setLocation(Mouse.getDX(), Mouse.getDY());
         }
-        mousePos.x = Mouse.getX();
-        mousePos.y = Mouse.getY();
     }
 
     private void observeMouseButtons() {
@@ -116,11 +110,6 @@ public class InputKeeper {
                 keysDown[currentCheck] = Keyboard.isKeyDown(currentCheck);
             }while(i.hasNext());
         }
-    }
-
-    private void doCaptureMouse() {
-        Point center = displayProperties.getCenter();
-        Mouse.setCursorPosition(center.x, center.y);
     }
     
 }

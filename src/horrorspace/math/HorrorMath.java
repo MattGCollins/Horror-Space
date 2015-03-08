@@ -1,6 +1,8 @@
 package horrorspace.math;
 
+import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 /**
  *
@@ -42,5 +44,33 @@ public class HorrorMath {
     
     public static float getSign(float number) {
         return number < 0 ? -1 : 1;
+    }
+
+    public static Vector4f quaternionToAxisAngle(Quaternion quaternion) {
+        if(quaternion.getW() == 1){
+            return new Vector4f(0, 1, 0, 0);
+        }
+        float angle = 2 * (float) Math.acos(quaternion.getW());
+        float divisionFactor = (float) Math.sqrt(1 - (quaternion.getW() * quaternion.getW()));
+        float x = quaternion.getX() / divisionFactor;
+        float y = quaternion.getY() / divisionFactor;
+        float z = quaternion.getZ() / divisionFactor;
+        return new Vector4f(x, y, z, angle);
+    }
+
+    public static Quaternion conjugate(Quaternion quaternion1, Quaternion quaternion2) {
+        Quaternion returnQuaternion = new Quaternion();
+        Quaternion.mul(quaternion2, quaternion1, returnQuaternion);
+        Quaternion.mulInverse(returnQuaternion, quaternion2, returnQuaternion);
+        return returnQuaternion;
+    }
+    
+    public static boolean isPointInsideBox(Vector3f point, Vector3f minPoint, Vector3f maxPoint){
+        if(minPoint.x < point.x && point.x < maxPoint.x &&
+            minPoint.y < point.y && point.y < maxPoint.y &&
+            minPoint.z < point.z && point.z < maxPoint.z) {
+            return true;
+        }
+        return false;
     }
 }

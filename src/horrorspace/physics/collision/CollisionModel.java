@@ -31,13 +31,13 @@ public class CollisionModel implements CollisionObject {
         for(CollisionFace face : collisionFaces) {
             face.pushAwayPrimary(object);
         }
+        for(CollisionFace face : collisionFaces) {
+            face.pushAwaySecondary(object);
+        }
     }
 
     @Override
     public void pushAwaySecondary(CollisionObject object) {
-        for(CollisionFace face : collisionFaces) {
-            face.pushAwaySecondary(object);
-        }
     }
 
 }

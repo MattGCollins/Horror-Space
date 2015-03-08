@@ -9,6 +9,7 @@ import static horrorspace.math.HorrorMath.add;
 import static horrorspace.math.HorrorMath.scaleVector;
 import static horrorspace.math.HorrorMath.square;
 import static horrorspace.math.HorrorMath.dotProduct;
+import org.lwjgl.util.vector.Quaternion;
 
 /**
  *
@@ -19,7 +20,6 @@ public class Entity {
     private Vector3f position;
     private Vector3f velocity;
     private Vector3f acceleration;
-    public float rotation;
     private Vector3f gravity = new Vector3f();
     private boolean grounded = false;
     
@@ -31,7 +31,6 @@ public class Entity {
         previousPosition = new Vector3f(0, 1, 0);
         velocity = new Vector3f(0, 0, 0);
         acceleration = new Vector3f(0, 0, 0);
-        rotation = 0;
     }
     
     public void update()

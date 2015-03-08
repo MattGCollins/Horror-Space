@@ -32,7 +32,10 @@ public class Room {
 
     public void applyGravity(Entity entity) {
         for(GravityVolume gravityVolume : gravityVolumes) {
-            gravityVolume.applyGravity(entity);
+            if(gravityVolume.includes(entity)){
+                gravityVolume.applyGravity(entity);
+                break;
+            }
         }
     }
 }

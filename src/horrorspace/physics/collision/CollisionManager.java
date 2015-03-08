@@ -45,9 +45,6 @@ public class CollisionManager {
             for(CollisionObject staticObject : staticObjects) {
                 staticObject.pushAwayPrimary(object);
             }
-            for(CollisionObject staticObject : staticObjects) {
-                staticObject.pushAwaySecondary(object);
-            }
         }
     }
 }
