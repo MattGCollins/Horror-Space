@@ -51,17 +51,15 @@ public class HorrorMath {
             return new Vector4f(0, 1, 0, 0);
         }
         float angle = 2 * (float) Math.acos(quaternion.getW());
-        float divisionFactor = (float) Math.sqrt(1 - (quaternion.getW() * quaternion.getW()));
+        float divisionFactor = (float) Math.sin(angle / 2);
         float x = quaternion.getX() / divisionFactor;
         float y = quaternion.getY() / divisionFactor;
         float z = quaternion.getZ() / divisionFactor;
         return new Vector4f(x, y, z, angle);
     }
 
-    public static Quaternion conjugate(Quaternion quaternion1, Quaternion quaternion2) {
-        Quaternion returnQuaternion = new Quaternion();
-        Quaternion.mul(quaternion2, quaternion1, returnQuaternion);
-        Quaternion.mulInverse(returnQuaternion, quaternion2, returnQuaternion);
+    public static Quaternion getConjugate(Quaternion quaternion) {
+        Quaternion returnQuaternion = new Quaternion(-quaternion.x, -quaternion.y, -quaternion.z, quaternion.w);
         return returnQuaternion;
     }
     
@@ -72,5 +70,13 @@ public class HorrorMath {
             return true;
         }
         return false;
+    }
+
+    public static Vector3f rotateVectorByQuaternion(Vector3f translation, Quaternion rotationQuaternion) {
+        Quaternion translationQuaternion = new Quaternion(translation.x, translation.y, translation.z, 0);
+        Quaternion tempStorage = new Quaternion();
+        Quaternion.mul(getConjugate(rotationQuaternion), translationQuaternion, tempStorage);
+        Quaternion.mul(tempStorage, rotationQuaternion, translationQuaternion);
+        return new Vector3f(translationQuaternion.x, translationQuaternion.y, translationQuaternion.z);
     }
 }

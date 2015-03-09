@@ -80,9 +80,17 @@ public class Entity {
         this.acceleration = add(this.acceleration, acceleration);
     }
     
+    public void removeGravity() {
+        gravity = null;
+    }
+    
     public void applyGravity(Vector3f acceleration) {
         accelerate(acceleration);
         gravity = acceleration;
+    }
+    
+    public Vector3f getGravity() {
+        return gravity;
     }
     
     public void reboundSurface(Vector3f vector) {
@@ -97,11 +105,13 @@ public class Entity {
     }
 
     private void checkIfFloor(Vector3f normal) {
-        Vector3f gravityNormal = new Vector3f();
-        gravity.normalise(gravityNormal);
-        float floorness = dotProduct(gravityNormal, normal);
-        if(floorness < FLOOR_DOT){
-            grounded = true;
+        if(gravity != null) {
+            Vector3f gravityNormal = new Vector3f();
+            gravity.normalise(gravityNormal);
+            float floorness = dotProduct(gravityNormal, normal);
+            if(floorness < FLOOR_DOT){
+                grounded = true;
+            }
         }
     }
     

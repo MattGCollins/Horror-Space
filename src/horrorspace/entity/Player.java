@@ -21,7 +21,9 @@ public class Player extends Entity implements CollisionSphere {
     public float jumpPosition;
     private float rotationX;
     private float rotationY;
+    private Quaternion rotationalBase;
     private Quaternion rotation;
+    private Vector3f previousGravity;
     
     //Remove this once menus come into play
     private boolean mouseCaptured = true;
@@ -42,6 +44,8 @@ public class Player extends Entity implements CollisionSphere {
         setKeyBindings();
         jumpPosition = 0;
         rotation = new Quaternion();
+        rotationalBase = new Quaternion();
+        previousGravity = null;
     }
     
     public void init() {
@@ -51,14 +55,15 @@ public class Player extends Entity implements CollisionSphere {
     @Override
     public void update()
     {
-        handleInput();
+        checkGravityOrientation();
+        calculateRotation();
+        addTranslation(calculateTranslation());
+        handleSpecialInputs();
         super.update();
     }
     
-    public void handleInput()
+    public void handleSpecialInputs()
     {
-        calculateRotation();
-        addTranslation(calculateTranslation());
         if(input.isDown(Keyboard.KEY_F4)){
             if(! mouseToggling){
                 mouseCaptured = !mouseCaptured;
@@ -88,13 +93,15 @@ public class Player extends Entity implements CollisionSphere {
         pitchQuaternion.setFromAxisAngle(new Vector4f(-1, 0, 0, (float) (rotationY * (Math.PI / 180.0f))));
         Quaternion yawQuaternion = new Quaternion();
         yawQuaternion.setFromAxisAngle(new Vector4f(0, 1, 0, (float) (rotationX * (Math.PI / 180.0f))));
+        Quaternion addedRotation = new Quaternion();
         Quaternion.mul(pitchQuaternion, yawQuaternion, rotation);
+        Quaternion.mul(rotation, rotationalBase, rotation);
         rotation.normalise();
     }
 
-    private Quaternion calculateTranslation() {
+    private Vector3f calculateTranslation() {
         float moveSpeed = isGrounded() ? GROUND_MOVE_SPEED : AIR_MOVE_SPEED;
-        Quaternion translation = new Quaternion();
+        Vector3f translation = new Vector3f(0, 0, 0);
         if(input.isDown(Keyboard.KEY_A) || input.isDown(Keyboard.KEY_LEFT)){
             translation.x -= moveSpeed;
         }
@@ -126,11 +133,13 @@ public class Player extends Entity implements CollisionSphere {
         return translation;
     }
 
-    public void addTranslation(Quaternion translation) {
+    public void addTranslation(Vector3f translation) {
         Quaternion yawQuaternion = new Quaternion();
-        yawQuaternion.setFromAxisAngle(new Vector4f(0, 1, 0, (float) (-rotationX * (Math.PI / 180.0f))));
-        translation = HorrorMath.conjugate(translation, yawQuaternion);
-        Vector3f translationRotated = new Vector3f(translation.x, translation.y, translation.z);
+        yawQuaternion.setFromAxisAngle(new Vector4f(0, 1, 0, (float) (rotationX * (Math.PI / 180.0f))));
+        Quaternion rotationQuaternion = new Quaternion();
+        Quaternion.mul(yawQuaternion, rotationalBase, rotationQuaternion);
+        rotationQuaternion.normalise();
+        Vector3f translationRotated = HorrorMath.rotateVectorByQuaternion(translation, rotationQuaternion);
         accelerate(translationRotated);
     }
 
@@ -169,7 +178,7 @@ public class Player extends Entity implements CollisionSphere {
     public void rebound(Vector3f vector) {
         reboundSurface(vector);
     }
-
+    
     @Override
     public void pushAwayPrimary(CollisionObject object) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -178,5 +187,19 @@ public class Player extends Entity implements CollisionSphere {
     @Override
     public void pushAwaySecondary(CollisionObject object) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void checkGravityOrientation() {
+        final Vector3f currentGravity = getGravity();
+        if(previousGravity != currentGravity){
+            previousGravity = currentGravity;
+            if(currentGravity != null){
+                recalculateRotationalBase(currentGravity);
+            }
+        }
+    }
+
+    private void recalculateRotationalBase(Vector3f currentGravity) {
+        
     }
 }

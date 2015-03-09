@@ -17,6 +17,7 @@ public class PhysicsManager {
     }
     
     public void update() {
+        Globals.player.removeGravity();
         rooms.get(0).applyGravity(Globals.player);
         Globals.player.update();
         Globals.collisionManager.update();
