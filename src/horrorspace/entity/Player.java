@@ -7,6 +7,7 @@ import horrorspace.physics.collision.CollisionObject;
 import horrorspace.physics.collision.CollisionSphere;
 import java.awt.Point;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -43,8 +44,8 @@ public class Player extends Entity implements CollisionSphere {
         setPosition(new Vector3f(0.0f, 1.0f, 0.0f));
         setKeyBindings();
         jumpPosition = 0;
-        rotation = new Quaternion();
         rotationalBase = new Quaternion();
+        rotation = rotationalBase;
         previousGravity = null;
     }
     
@@ -194,12 +195,40 @@ public class Player extends Entity implements CollisionSphere {
         if(previousGravity != currentGravity){
             previousGravity = currentGravity;
             if(currentGravity != null){
-                recalculateRotationalBase(currentGravity);
+                recalculateRotationalBase(rotation, currentGravity);
             }
         }
     }
 
-    private void recalculateRotationalBase(Vector3f currentGravity) {
-        
+    private void recalculateRotationalBase(Quaternion rotationalStart, Vector3f currentGravity) {
+        Vector3f newUp = new Vector3f();
+        currentGravity.negate(newUp);
+        newUp.normalise();
+        Vector3f originalBackward = HorrorMath.rotateVectorByQuaternion(new Vector3f(0, 0, 1), rotationalStart);
+        Vector3f newRight = HorrorMath.crossProduct(newUp, originalBackward);
+        if(newRight.length() < 0.001) {
+            if(HorrorMath.dotProduct(originalBackward, newUp) > 0){
+                originalBackward = HorrorMath.rotateVectorByQuaternion(new Vector3f(0, 1, 0), rotationalStart);
+            } else {
+                originalBackward = HorrorMath.rotateVectorByQuaternion(new Vector3f(0, -1, 0), rotationalStart);
+            }
+            newRight = HorrorMath.crossProduct(newUp, originalBackward);
+        }
+        Vector3f newBack = HorrorMath.crossProduct(newRight, newUp);
+        Matrix3f newMatrixRotation = new Matrix3f();
+        newMatrixRotation.m00 = newRight.x;
+        newMatrixRotation.m01 = newRight.y;
+        newMatrixRotation.m02 = newRight.z;
+        newMatrixRotation.m10 = newUp.x;
+        newMatrixRotation.m11 = newUp.y;
+        newMatrixRotation.m12 = newUp.z;
+        newMatrixRotation.m20 = newBack.x;
+        newMatrixRotation.m21 = newBack.y;
+        newMatrixRotation.m22 = newBack.z;
+        Quaternion newQuaternionRotation = new Quaternion();
+        newQuaternionRotation.setFromMatrix(newMatrixRotation);
+        newQuaternionRotation.normalise();
+        rotationalBase = newQuaternionRotation;
+        rotationX = 0;
     }
 }

@@ -164,8 +164,7 @@ public class HorrorSpace {
         GL11.glRotated(axisAngle.w * (180.0f / Math.PI), axisAngle.x, axisAngle.y, axisAngle.z);
         glPushMatrix();
         Vector3f position = Globals.player.getPosition();
-        float playerHeadOffset = Globals.player.getRadius() / 2;
-        GL11.glTranslated(-position.x, -position.y - playerHeadOffset, -position.z);
+        GL11.glTranslated(-position.x, -position.y, -position.z);
                
         room.render();
         
