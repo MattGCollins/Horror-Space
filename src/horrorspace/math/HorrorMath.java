@@ -1,5 +1,6 @@
 package horrorspace.math;
 
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -78,5 +79,19 @@ public class HorrorMath {
         Quaternion.mul(getConjugate(rotationQuaternion), translationQuaternion, tempStorage);
         Quaternion.mul(tempStorage, rotationQuaternion, translationQuaternion);
         return new Vector3f(translationQuaternion.x, translationQuaternion.y, translationQuaternion.z);
+    }
+    
+    public static Matrix3f getMatrixByAxes(Vector3f right, Vector3f up, Vector3f back){
+        Matrix3f newMatrix = new Matrix3f();
+        newMatrix.m00 = right.x;
+        newMatrix.m01 = right.y;
+        newMatrix.m02 = right.z;
+        newMatrix.m10 = up.x;
+        newMatrix.m11 = up.y;
+        newMatrix.m12 = up.z;
+        newMatrix.m20 = back.x;
+        newMatrix.m21 = back.y;
+        newMatrix.m22 = back.z;
+        return newMatrix;
     }
 }

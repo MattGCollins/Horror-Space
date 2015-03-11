@@ -20,16 +20,17 @@ public class Player extends Entity implements CollisionSphere {
     public int currentMove;
     public InputKeeper input;
     public float jumpPosition;
-    private float rotationX;
     private float rotationY;
     private Quaternion rotationalBase;
     private Quaternion rotation;
+    private Vector4f rotationalAdjustment;
     private Vector3f previousGravity;
     
     //Remove this once menus come into play
     private boolean mouseCaptured = true;
     
     public float curMovementTime = 0.0f;
+    public float flipSpeed = 4.0f;
     private boolean mouseToggling = false;
     
     private static final float JUMP_DURATION = 0.2f;
@@ -46,6 +47,7 @@ public class Player extends Entity implements CollisionSphere {
         jumpPosition = 0;
         rotationalBase = new Quaternion();
         rotation = rotationalBase;
+        rotationalAdjustment = null;
         previousGravity = null;
     }
     
@@ -78,12 +80,7 @@ public class Player extends Entity implements CollisionSphere {
 
     private void calculateRotation() {
         Point mouseDiff = input.getMouseDiff();
-        rotationX += mouseDiff.x / 5.0f;
-        if(rotationX > 180){
-            rotationX -= 360;
-        } else if (rotationX < -180) {
-            rotationX += 360;
-        }
+        float rotationX = mouseDiff.x / 5.0f;
         rotationY += mouseDiff.y / 5.0f;
         if(rotationY > 90){
             rotationY = 90;
@@ -95,8 +92,21 @@ public class Player extends Entity implements CollisionSphere {
         Quaternion yawQuaternion = new Quaternion();
         yawQuaternion.setFromAxisAngle(new Vector4f(0, 1, 0, (float) (rotationX * (Math.PI / 180.0f))));
         Quaternion addedRotation = new Quaternion();
-        Quaternion.mul(pitchQuaternion, yawQuaternion, rotation);
-        Quaternion.mul(rotation, rotationalBase, rotation);
+        Quaternion.mul(yawQuaternion, rotationalBase, rotationalBase);
+        rotationalBase.normalise();
+        Quaternion.mul(pitchQuaternion, rotationalBase, rotation);
+        if(rotationalAdjustment != null) {
+            Quaternion adjustment = new Quaternion();
+            float newWSize = Math.abs(rotationalAdjustment.w) - (float) (Globals.frameElapsed * flipSpeed);
+            if(newWSize < 0)
+            {
+                rotationalAdjustment = null;
+            } else {
+                rotationalAdjustment.w = Math.signum(rotationalAdjustment.w) * newWSize;
+                adjustment.setFromAxisAngle(rotationalAdjustment);
+                Quaternion.mul(rotation, adjustment, rotation);
+            }
+        }
         rotation.normalise();
     }
 
@@ -135,12 +145,7 @@ public class Player extends Entity implements CollisionSphere {
     }
 
     public void addTranslation(Vector3f translation) {
-        Quaternion yawQuaternion = new Quaternion();
-        yawQuaternion.setFromAxisAngle(new Vector4f(0, 1, 0, (float) (rotationX * (Math.PI / 180.0f))));
-        Quaternion rotationQuaternion = new Quaternion();
-        Quaternion.mul(yawQuaternion, rotationalBase, rotationQuaternion);
-        rotationQuaternion.normalise();
-        Vector3f translationRotated = HorrorMath.rotateVectorByQuaternion(translation, rotationQuaternion);
+        Vector3f translationRotated = HorrorMath.rotateVectorByQuaternion(translation, rotationalBase);
         accelerate(translationRotated);
     }
 
@@ -195,7 +200,9 @@ public class Player extends Entity implements CollisionSphere {
         if(previousGravity != currentGravity){
             previousGravity = currentGravity;
             if(currentGravity != null){
+                Quaternion oldRotationalBase = rotationalBase;
                 recalculateRotationalBase(rotation, currentGravity);
+                addRotationalAdjustment(rotationalBase, oldRotationalBase);
             }
         }
     }
@@ -215,20 +222,16 @@ public class Player extends Entity implements CollisionSphere {
             newRight = HorrorMath.crossProduct(newUp, originalBackward);
         }
         Vector3f newBack = HorrorMath.crossProduct(newRight, newUp);
-        Matrix3f newMatrixRotation = new Matrix3f();
-        newMatrixRotation.m00 = newRight.x;
-        newMatrixRotation.m01 = newRight.y;
-        newMatrixRotation.m02 = newRight.z;
-        newMatrixRotation.m10 = newUp.x;
-        newMatrixRotation.m11 = newUp.y;
-        newMatrixRotation.m12 = newUp.z;
-        newMatrixRotation.m20 = newBack.x;
-        newMatrixRotation.m21 = newBack.y;
-        newMatrixRotation.m22 = newBack.z;
+        Matrix3f newMatrixRotation = HorrorMath.getMatrixByAxes(newRight, newUp, newBack);
         Quaternion newQuaternionRotation = new Quaternion();
         newQuaternionRotation.setFromMatrix(newMatrixRotation);
         newQuaternionRotation.normalise();
         rotationalBase = newQuaternionRotation;
-        rotationX = 0;
+    }
+
+    private void addRotationalAdjustment(Quaternion newRotation, Quaternion oldRotation) {
+        Quaternion rotationalDiff = new Quaternion();
+        Quaternion.mul(HorrorMath.getConjugate(newRotation), oldRotation, rotationalDiff);
+        rotationalAdjustment = HorrorMath.quaternionToAxisAngle(rotationalDiff);
     }
 }
