@@ -95,18 +95,7 @@ public class Player extends Entity implements CollisionSphere {
         Quaternion.mul(yawQuaternion, rotationalBase, rotationalBase);
         rotationalBase.normalise();
         Quaternion.mul(pitchQuaternion, rotationalBase, rotation);
-        if(rotationalAdjustment != null) {
-            Quaternion adjustment = new Quaternion();
-            float newWSize = Math.abs(rotationalAdjustment.w) - (float) (Globals.frameElapsed * flipSpeed);
-            if(newWSize < 0)
-            {
-                rotationalAdjustment = null;
-            } else {
-                rotationalAdjustment.w = Math.signum(rotationalAdjustment.w) * newWSize;
-                adjustment.setFromAxisAngle(rotationalAdjustment);
-                Quaternion.mul(rotation, adjustment, rotation);
-            }
-        }
+        addRotationalAdjustment(rotation);
         rotation.normalise();
     }
 
@@ -202,7 +191,8 @@ public class Player extends Entity implements CollisionSphere {
             if(currentGravity != null){
                 Quaternion oldRotationalBase = rotationalBase;
                 recalculateRotationalBase(rotation, currentGravity);
-                addRotationalAdjustment(rotationalBase, oldRotationalBase);
+                addRotationalAdjustment(oldRotationalBase);
+                calculateRotationalAdjustment(rotationalBase, oldRotationalBase);
             }
         }
     }
@@ -229,9 +219,24 @@ public class Player extends Entity implements CollisionSphere {
         rotationalBase = newQuaternionRotation;
     }
 
-    private void addRotationalAdjustment(Quaternion newRotation, Quaternion oldRotation) {
+    private void calculateRotationalAdjustment(Quaternion newRotation, Quaternion oldRotation) {
         Quaternion rotationalDiff = new Quaternion();
         Quaternion.mul(HorrorMath.getConjugate(newRotation), oldRotation, rotationalDiff);
         rotationalAdjustment = HorrorMath.quaternionToAxisAngle(rotationalDiff);
+    }
+
+    private void addRotationalAdjustment(Quaternion rotation) {
+        if(rotationalAdjustment != null) {
+            Quaternion adjustment = new Quaternion();
+            float newWSize = Math.abs(rotationalAdjustment.w) - (float) (Globals.frameElapsed * flipSpeed);
+            if(newWSize < 0)
+            {
+                rotationalAdjustment = null;
+            } else {
+                rotationalAdjustment.w = Math.signum(rotationalAdjustment.w) * newWSize;
+                adjustment.setFromAxisAngle(rotationalAdjustment);
+                Quaternion.mul(rotation, adjustment, rotation);
+            }
+        }
     }
 }
